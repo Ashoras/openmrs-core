@@ -1140,7 +1140,7 @@ public class InitializationFilter extends StartupFilter {
 	 * @return result of executeUpdate or -1 for error
 	 */
 	private int executeStatement(boolean silent, String user, String pw, String sql, String... args) {
-		
+		silent =false;
 		Connection connection = null;
 		Statement statement = null;
 		try {
@@ -1164,7 +1164,9 @@ public class InitializationFilter extends StartupFilter {
 			}
 			
 			connection = DriverManager.getConnection(tempDatabaseConnection, user, pw);
-			
+			log.info(" Connection user "+ user);
+			log.info(" Connection Password "+ pw);
+			log.info(" Connection tempDatabase "+tempDatabaseConnection);
 			for (String arg : args) {
 				arg = arg.replace(";", "&#094"); // to prevent any sql injection
 				replacedSql = replacedSql.replaceFirst("\\?", arg);
@@ -1172,7 +1174,7 @@ public class InitializationFilter extends StartupFilter {
 			
 			// run the sql statement
 			statement = connection.createStatement();
-			
+			log.info(" Connection replacedSql "+ replacedSql);
 			return statement.executeUpdate(replacedSql);
 			
 		}
